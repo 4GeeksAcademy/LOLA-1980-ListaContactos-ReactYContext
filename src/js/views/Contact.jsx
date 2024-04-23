@@ -26,6 +26,27 @@ export const Contact = () => {
             .catch(error => console.error("Error al obtener contactos:", error));
     };
 
+    const deleteContact = index => {
+        //Obtener el ID del TODO a eliminar
+        const contactId = contacts[index].id;
+
+
+        //Realizar la solicitud DELETE a la API
+        fetch(contactURL + 'agendas/Lola1980/contacts/' + contactId, {
+            method: "DELETE"
+        })
+            .then(response => {
+                //Verificar si la solicitud fue exitosa
+                if (!response.ok) {
+                    throw new Error("Error al eliminar el TODO")
+                }
+                //Actualizar el estado eliminando el TODO del array
+                setContacts(contacts.filter((_, idx) => idx !== index));
+                console.log("Contact eliminado exitosamente");
+            })
+            .catch(error => console.log("Error al eliminar el TODO:", error));
+    };
+
     useEffect(() => {
         getContact();
     }, []);
@@ -71,7 +92,7 @@ export const Contact = () => {
                                     </div>
                                     <div>
                                         <FontAwesomeIcon icon="pencil" className='me-5' />
-                                        <FontAwesomeIcon icon="trash-can" />
+                                        <FontAwesomeIcon icon="trash-can" onClick={() => deleteContact(index)} />
                                     </div>
                                 </div>
                             </div>
