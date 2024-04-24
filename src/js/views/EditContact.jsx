@@ -4,23 +4,21 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faLocationDot, faPhoneFlip, faEnvelope, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 // Agrega los iconos que necesitas al library
 library.add(faLocationDot, faPhoneFlip, faEnvelope, faPencil, faTrashCan);
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 export const EditContact = () => {
-    // const params = useParams();
-    //console.log(params);
 
     const contactURL = "https://playground.4geeks.com/contact/agendas/";
 
+    const { idContact } = useParams(); // Obtener el id del contacto de la URL
+
+    // Inicializa el estado contacts con un objeto vacío
     const [contacts, setContacts] = useState({
         name: "",
         email: "",
         phone: "",
         address: ""
     });
-
-    //const [loading, setLoading] = useState(true);
-    const { idContact } = useParams(); // Obtener el id del contacto de la URL
 
 
     const handleChange = (e) => {
@@ -31,26 +29,30 @@ export const EditContact = () => {
         });
     };
 
-    const handleSave = (e) => {
+    const handleUpdate = (e) => {
         e.preventDefault(); // Evita que se realice la acción por defecto del formulario (enviarlo)
         updateContact();
     };
 
 
-
-    // Utiliza useEffect para cargar los detalles del contacto cuando el componente se monta
     useEffect(() => {
         // Llama a una función que obtenga los detalles del contacto por su ID
         fetchContactDetails(idContact);
-    }, []);
+    }, [idContact]);
 
 
     // Función para obtener los detalles del contacto por su ID
-    const fetchContactDetails = (id) => {
-        fetch(contactURL + 'Lola1980/contacts/' + id)
+    const fetchContactDetails = () => {
+        fetch(contactURL + 'Lola1980/')
             .then(response => response.json())
             .then(data => {
-                setContacts(data); // Actualiza el estado con los detalles del contacto
+                const contact = data.contacts.find(contact => contact.id === parseInt(idContact));
+                if (contact) {
+                    // Actualiza el estado con los detalles del contacto
+                    setContacts(contact);
+                } else {
+                    throw new Error('User not found');
+                }
             })
             .catch(error => console.error("Error al obtener los detalles del contacto:", error));
     };
@@ -80,8 +82,8 @@ export const EditContact = () => {
 
     return (
         <div className="container mt-5">
-            <h1 className="text-center fw-bold mb-3">Add a new contact</h1>
-            <form className="row g-3 needs-validation" noValidate>
+            <h1 className="text-center fw-bold mb-3">Update a contact</h1>
+            <form className="row g-3">
                 <div className="col-md-12">
                     <label htmlFor="validationCustom01" className="form-label fw-bold">Full Name</label>
                     <input
@@ -135,7 +137,7 @@ export const EditContact = () => {
                 </div>
 
                 <div className="col-md-12">
-                    <button className="btn btn-primary" style={{ width: "100%" }} type="submit" onClick={handleSave}>Save</button>
+                    <button className="btn btn-primary" style={{ width: "100%" }} type="submit" onClick={handleUpdate}>Update Contact</button>
                 </div>
                 <Link to="/Contact">
                     <span className="text-primary fw-bold">or get back to contacts</span>
@@ -145,4 +147,3 @@ export const EditContact = () => {
     )
 }
 
-//export default ContactCard
