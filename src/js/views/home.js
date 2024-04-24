@@ -11,8 +11,8 @@ export const Home = () => (
 		<Link to="/Contact">
 			<p>Lista de Contactos</p>
 		</Link>
-		<Link to="/ContactCard">
-			<button className='btn btn-success'>Go to Contact Card</button>
+		<Link to="/EditContact">
+			<button className='btn btn-success'>Go to Edit Contact</button>
 		</Link>
 	</div>
 );

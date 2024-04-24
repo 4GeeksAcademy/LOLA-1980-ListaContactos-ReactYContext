@@ -11,7 +11,7 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import { ContactCard } from "./component/ContactCard.jsx";
+import { EditContact } from "./views/EditContact.jsx";
 
 
 
@@ -33,7 +33,7 @@ const Layout = () => {
 						<Route path="*" element={<h1>Not found!</h1>} />
 						<Route path="/Contact" element={<Contact />} />
 						<Route path="/AddContact" element={<AddContact />} />
-						<Route path="/ContactCard/:idContact" element={<ContactCard />} />
+						<Route path="/EditContact/:idContact" element={<EditContact />} />
 					</Routes>
 					<Footer />
 				</ScrollToTop>

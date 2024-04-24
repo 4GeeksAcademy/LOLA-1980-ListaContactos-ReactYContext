@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom"; // Asegúrate de importar useHistory correctamente
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faLocationDot, faPhoneFlip, faEnvelope, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 // Agrega los iconos que necesitas al library
@@ -7,13 +8,14 @@ library.add(faLocationDot, faPhoneFlip, faEnvelope, faPencil, faTrashCan);
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { Loading } from "../component/Loading.jsx";
-//import { ContactCard } from '../component/ContactCard.jsx'
 
 export const Contact = () => {
     //LOGICA
     const contactURL = "https://playground.4geeks.com/contact/"
 
     const [contacts, setContacts] = useState([]);
+
+    //const history = useHistory(); // Inicializa useHistory
 
     const getContact = () => {
         fetch(contactURL + 'agendas/Lola1980/')
@@ -50,6 +52,11 @@ export const Contact = () => {
     useEffect(() => {
         getContact();
     }, []);
+
+    {/*const handleEditContact = (id) => {
+        // Redirige a la vista de edición con el id del contacto
+        history.push(`/EditContact/${id}`);
+    };*/}
 
     return (
         <div className='container'>
@@ -91,7 +98,9 @@ export const Contact = () => {
                                         </div>
                                     </div>
                                     <div>
-                                        <FontAwesomeIcon icon="pencil" className='me-5' />
+                                        <Link to={`/EditContact/${contact.id}`}>
+                                            <FontAwesomeIcon icon="pencil" className='me-5'  />
+                                        </Link>
                                         <FontAwesomeIcon icon="trash-can" onClick={() => deleteContact(index)} />
                                     </div>
                                 </div>
