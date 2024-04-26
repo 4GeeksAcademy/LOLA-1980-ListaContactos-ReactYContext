@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext";
 import { Link, useParams } from "react-router-dom";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faLocationDot, faPhoneFlip, faEnvelope, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +12,8 @@ export const EditContact = () => {
     const contactURL = "https://playground.4geeks.com/contact/agendas/";
 
     const { idContact } = useParams(); // Obtener el id del contacto de la URL
+
+    const { store, actions } = useContext(Context);
 
     // Inicializa el estado contacts con un objeto vacío
     const [contacts, setContacts] = useState({
@@ -31,17 +34,10 @@ export const EditContact = () => {
 
     const handleUpdate = (e) => {
         e.preventDefault(); // Evita que se realice la acción por defecto del formulario (enviarlo)
-        updateContact();
+        actions.updateContact(idContact, contacts); // Llama al método updateContact del contexto
+        //updateContact();
     };
 
-
-    useEffect(() => {
-        // Llama a una función que obtenga los detalles del contacto por su ID
-        fetchContactDetails(idContact);
-    }, [idContact]);
-
-
-    // Función para obtener los detalles del contacto por su ID
     const fetchContactDetails = () => {
         fetch(contactURL + 'Lola1980/')
             .then(response => response.json())
@@ -57,9 +53,15 @@ export const EditContact = () => {
             .catch(error => console.error("Error al obtener los detalles del contacto:", error));
     };
 
+    useEffect(() => {
+        // Llama a una función que obtenga los detalles del contacto por su ID
+        fetchContactDetails(idContact);
+    }, [idContact]);
+
+
 
     //Realizar la solicitud PUT a la API
-    const updateContact = () => {
+    /*const updateContact = () => {
         fetch(contactURL + 'Lola1980/contacts/' + idContact, {
             method: "PUT",
             body: JSON.stringify(contacts),
@@ -77,7 +79,8 @@ export const EditContact = () => {
                 window.location.href = "/Contact";
             })
             .catch(error => console.log('Error al actualizar el contacto:', error));
-    };
+    };*/
+
 
 
     return (
@@ -92,7 +95,7 @@ export const EditContact = () => {
                         id="validationCustom01"
                         name="name"
                         placeholder="Full Name"
-                        value={contacts.name}
+                        value={contacts.name || ""}
                         onChange={handleChange}
                     />
                 </div>
@@ -105,7 +108,7 @@ export const EditContact = () => {
                         id="validationCustom02"
                         name="email"
                         placeholder="Email"
-                        value={contacts.email}
+                        value={contacts.email || ""}
                         onChange={handleChange}
                     />
                 </div>
@@ -118,7 +121,7 @@ export const EditContact = () => {
                         id="validationCustom03"
                         name="phone"
                         placeholder="Phone"
-                        value={contacts.phone}
+                        value={contacts.phone || ""}
                         onChange={handleChange}
                     />
                 </div>
@@ -131,7 +134,7 @@ export const EditContact = () => {
                         id="validationCustom04"
                         name="address"
                         placeholder="Address"
-                        value={contacts.address}
+                        value={contacts.address || ""}
                         onChange={handleChange}
                     />
                 </div>
@@ -145,5 +148,5 @@ export const EditContact = () => {
             </form>
         </div>
     )
-}
+};
 

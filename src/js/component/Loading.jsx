@@ -5,7 +5,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 export const Loading = () => {
     return (
-        <div className="loading">
+        <div className="loading d-flex justify-content-center">
             <FontAwesomeIcon icon={faSpinner} spin size="3x" />
             <p>Cargando...</p>
         </div>

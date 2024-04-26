@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 export const AddContact = () => {
-    const contactURL = "https://playground.4geeks.com/contact/agendas/Lola1980/contacts";
+    //const contactURL = "https://playground.4geeks.com/contact/agendas/Lola1980/contacts";
+
+    const { store, actions } = useContext(Context);
 
     const [newContactLabels, setNewContactLabels] = useState({ name: "", phone: "", email: "", address: "" });
 
@@ -14,7 +17,7 @@ export const AddContact = () => {
         }));
     };
 
-    const addContact = () => {
+    /*const addContact = () => {
         fetch(contactURL, {
             method: "POST",
             body: JSON.stringify(newContactLabels),
@@ -34,11 +37,13 @@ export const AddContact = () => {
                 setNewContactLabels({ name: "", phone: "", email: "", address: "" });
             })
             .catch(error => console.error("Error añadido:", error));
-    };
+    };*/
 
     const handleSave = (e) => {
         e.preventDefault(); // Evita que se realice la acción por defecto del formulario (enviarlo)
-        addContact();
+        actions.addContact(newContactLabels);
+        // Limpiar el Input después de una respuesta exitosa
+        setNewContactLabels({ name: "", phone: "", email: "", address: "" });
     };
 
     return (

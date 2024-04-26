@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom"; // Asegúrate de importar useHistory correctamente
+import React, { useState, useEffect, useContext } from "react";
+import { Context } from "../store/appContext.js";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faLocationDot, faPhoneFlip, faEnvelope, faPencil, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 // Agrega los iconos que necesitas al library
@@ -9,32 +9,31 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { Loading } from "../component/Loading.jsx";
 
+
 export const Contact = () => {
     //LOGICA
-    const contactURL = "https://playground.4geeks.com/contact/"
+    const contactURL = "https://playground.4geeks.com/contact/agendas/"
 
-    const [contacts, setContacts] = useState([]);
+    const { store, actions } = useContext(Context); // Obtén el estado global y las acciones del contexto
 
-    //const history = useHistory(); // Inicializa useHistory
+    const [contacts, setContacts] = useState([]); // Define un estado local para los contactos
 
-    const getContact = () => {
-        fetch(contactURL + 'agendas/Lola1980/')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.contacts); // Verifica el valor de data.contacts
-                setContacts(data.contacts);
-                console.log(contacts); // Verifica el estado contacts después de actualizarlo
-            })
-            .catch(error => console.error("Error al obtener contactos:", error));
-    };
+    /*const getContact = () => {
+            fetch(contactURL + 'Lola1980/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.contacts); // Verifica el valor de data.contacts
+                    setContacts(data.contacts);
+                    console.log(contacts); // Verifica el estado contacts después de actualizarlo
+                })
+                .catch(error => console.error("Error al obtener contactos:", error));
+        };*/
 
-    const deleteContact = index => {
+    /*const deleteContact = index => {
         //Obtener el ID del TODO a eliminar
         const contactId = contacts[index].id;
-
-
         //Realizar la solicitud DELETE a la API
-        fetch(contactURL + 'agendas/Lola1980/contacts/' + contactId, {
+        fetch(contactURL + 'Lola1980/contacts/' + contactId, {
             method: "DELETE"
         })
             .then(response => {
@@ -47,16 +46,19 @@ export const Contact = () => {
                 console.log("Contact eliminado exitosamente");
             })
             .catch(error => console.log("Error al eliminar el TODO:", error));
-    };
+    };*/
 
     useEffect(() => {
-        getContact();
+        actions.getContact();
+        console.log(store.contacts); // Imprime los contactos en la consola
+        //getContact();
     }, []);
 
-    {/*const handleEditContact = (id) => {
-        // Redirige a la vista de edición con el id del contacto
-        history.push(`/EditContact/${id}`);
-    };*/}
+    const deleteContact = index => {
+        actions.deleteContact(index);
+    };
+
+
 
     return (
         <div className='container'>
@@ -69,8 +71,8 @@ export const Contact = () => {
 
             <div>
                 {/* Verificar si contacts está vacío antes de mapearlo */}
-                {Array.isArray(contacts) && contacts.length > 0 ? (
-                    contacts.filter(contact => Object.keys(contact).length > 0)
+                {Array.isArray(store.contacts) && store.contacts.length > 0 ? (
+                    store.contacts.filter(contact => Object.keys(contact).length > 0)
                         .map((contact, index) => (
                             <div key={index} className='card py-3 px-5'>
                                 <div className='d-flex justify-content-between'>
@@ -99,7 +101,7 @@ export const Contact = () => {
                                     </div>
                                     <div>
                                         <Link to={`/EditContact/${contact.id}`}>
-                                            <FontAwesomeIcon icon="pencil" className='me-5'  />
+                                            <FontAwesomeIcon icon="pencil" className='me-5' />
                                         </Link>
                                         <FontAwesomeIcon icon="trash-can" onClick={() => deleteContact(index)} />
                                     </div>
